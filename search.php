@@ -76,9 +76,10 @@ include 'includes/header.php';
                 
                 if(count($properties) > 0) {
                     foreach($properties as $property):
+                    $image_url = !empty($property['image_url']) ? $property['image_url'] : DEFAULT_PROPERTY_IMAGE;
             ?>
             <div class="property-card">
-                <img src="<?php echo !empty($property['image_url']) ? htmlspecialchars($property['image_url']) : 'assets/images/default-property.jpg'; ?>" alt="<?php echo htmlspecialchars($property['title']); ?>">
+                <img src="<?php echo $image_url; ?>" alt="<?php echo htmlspecialchars($property['title']); ?>" class="property-image">
                 <div class="property-info">
                     <h3><?php echo htmlspecialchars($property['title']); ?></h3>
                     <p class="price">$<?php echo number_format($property['price']); ?></p>

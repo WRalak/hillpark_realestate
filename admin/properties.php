@@ -28,7 +28,27 @@ $properties = $stmt->fetchAll();
             <h1>Manage Properties</h1>
             <a href="add_property.php" class="btn btn-primary">Add New Property</a>
         </div>
-        
+        <!-- In property.php, update the contact form -->
+<div class="contact-form">
+    <h3>Schedule a Viewing</h3>
+    
+    <?php if(isset($_GET['success'])): ?>
+        <div class="alert success">Thank you! Your inquiry has been sent.</div>
+    <?php endif; ?>
+    
+    <?php if(isset($_GET['error'])): ?>
+        <div class="alert error">There was an error sending your inquiry. Please try again.</div>
+    <?php endif; ?>
+    
+    <form method="POST" action="submit_inquiry.php">
+        <input type="hidden" name="property_id" value="<?php echo $property['id']; ?>">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <input type="tel" name="phone" placeholder="Your Phone">
+        <textarea name="message" placeholder="Your Message" required>I'm interested in <?php echo htmlspecialchars($property['title']); ?>. Please contact me with more information.</textarea>
+        <button type="submit" class="btn btn-primary">Send Inquiry</button>
+    </form>
+</div>
         <table class="data-table">
             <thead>
                 <tr>

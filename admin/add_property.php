@@ -17,12 +17,15 @@ if(isset($_POST['add_property'])) {
     $type = $_POST['type'];
     $status = $_POST['status'];
     $featured = isset($_POST['featured']) ? 1 : 0;
+    $image_url = $_POST['image_url'] ?: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&h=400&fit=crop';
     
-    $stmt = $pdo->prepare("INSERT INTO properties (title, description, price, location, bedrooms, bathrooms, area, type, status, featured) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->execute([$title, $description, $price, $location, $bedrooms, $bathrooms, $area, $type, $status, $featured]);
+    $stmt = $pdo->prepare("INSERT INTO properties (title, description, price, location, bedrooms, bathrooms, area, type, status, featured, image_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     
-    header("Location: properties.php");
-    exit();
+    if($stmt->execute([$title, $description, $price, $location, $bedrooms, $bathrooms, $area, $type, $status, $featured, $image_url])) {
+        $success = "Property added successfully!";
+    } else {
+        $error = "Error adding property.";
+    }
 }
 ?>
 
@@ -34,49 +37,57 @@ if(isset($_POST['add_property'])) {
     <div class="admin-content">
         <h1>Add New Property</h1>
         
+        <?php if(isset($success)): ?>
+            <div class="alert success"><?php echo $success; ?></div>
+        <?php endif; ?>
+        
+        <?php if(isset($error)): ?>
+            <div class="alert error"><?php echo $error; ?></div>
+        <?php endif; ?>
+        
         <form method="POST" class="property-form">
             <div class="form-group">
-                <label>Property Title</label>
+                <label>Property Title *</label>
                 <input type="text" name="title" required>
             </div>
             
             <div class="form-group">
-                <label>Description</label>
-                <textarea name="description" rows="5" required></textarea>
+                <label>Description *</label>
+                <textarea name="description" rows="4" required></textarea>
             </div>
             
             <div class="form-row">
                 <div class="form-group">
-                    <label>Price</label>
+                    <label>Price *</label>
                     <input type="number" name="price" required>
                 </div>
                 
                 <div class="form-group">
-                    <label>Location</label>
+                    <label>Location *</label>
                     <input type="text" name="location" required>
                 </div>
             </div>
             
             <div class="form-row">
                 <div class="form-group">
-                    <label>Bedrooms</label>
+                    <label>Bedrooms *</label>
                     <input type="number" name="bedrooms" required>
                 </div>
                 
                 <div class="form-group">
-                    <label>Bathrooms</label>
+                    <label>Bathrooms *</label>
                     <input type="number" name="bathrooms" step="0.5" required>
                 </div>
                 
                 <div class="form-group">
-                    <label>Area (sqft)</label>
+                    <label>Area (sqft) *</label>
                     <input type="number" name="area" required>
                 </div>
             </div>
             
             <div class="form-row">
                 <div class="form-group">
-                    <label>Property Type</label>
+                    <label>Property Type *</label>
                     <select name="type" required>
                         <option value="house">House</option>
                         <option value="apartment">Apartment</option>
@@ -85,7 +96,7 @@ if(isset($_POST['add_property'])) {
                 </div>
                 
                 <div class="form-group">
-                    <label>Status</label>
+                    <label>Status *</label>
                     <select name="status" required>
                         <option value="available">Available</option>
                         <option value="sold">Sold</option>
@@ -95,12 +106,19 @@ if(isset($_POST['add_property'])) {
             </div>
             
             <div class="form-group">
-                <label>
-                    <input type="checkbox" name="featured"> Featured Property
+                <label>Image URL</label>
+                <input type="url" name="image_url" placeholder="https://example.com/image.jpg">
+                <small>Leave empty for default image</small>
+            </div>
+            
+            <div class="form-group">
+                <label class="checkbox">
+                    <input type="checkbox" name="featured"> 
+                    Featured Property (shows on homepage)
                 </label>
             </div>
             
-            <button type="submit" name="add_property" class="btn btn-primary">Add Property</button>
+            <button type="submit" name="add_property" class="btn">Add Property</button>
         </form>
     </div>
 </div>

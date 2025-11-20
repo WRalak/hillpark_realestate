@@ -21,6 +21,7 @@ $total_inquiries = $pdo->query("SELECT COUNT(*) FROM inquiries")->fetchColumn();
     
     <div class="admin-content">
         <h1>Dashboard</h1>
+        <p>Welcome back, <?php echo $_SESSION['username']; ?>!</p>
         
         <div class="stats-grid">
             <div class="stat-card">
@@ -47,11 +48,12 @@ $total_inquiries = $pdo->query("SELECT COUNT(*) FROM inquiries")->fetchColumn();
             $stmt = $pdo->query("SELECT * FROM properties ORDER BY created_at DESC LIMIT 5");
             $recent_properties = $stmt->fetchAll();
             ?>
-            <table>
+            <table class="data-table">
                 <thead>
                     <tr>
                         <th>Title</th>
                         <th>Price</th>
+                        <th>Type</th>
                         <th>Status</th>
                         <th>Date Added</th>
                     </tr>
@@ -59,9 +61,10 @@ $total_inquiries = $pdo->query("SELECT COUNT(*) FROM inquiries")->fetchColumn();
                 <tbody>
                     <?php foreach($recent_properties as $property): ?>
                     <tr>
-                        <td><?php echo $property['title']; ?></td>
+                        <td><?php echo htmlspecialchars($property['title']); ?></td>
                         <td>$<?php echo number_format($property['price']); ?></td>
-                        <td><?php echo $property['status']; ?></td>
+                        <td><?php echo ucfirst($property['type']); ?></td>
+                        <td><?php echo ucfirst($property['status']); ?></td>
                         <td><?php echo date('M j, Y', strtotime($property['created_at'])); ?></td>
                     </tr>
                     <?php endforeach; ?>

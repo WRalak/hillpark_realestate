@@ -5,7 +5,7 @@ session_start();
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
-define('DB_NAME', 'hillpark_db'); // Make sure this DB exists
+define('DB_NAME', 'hillpark_db');
 define('DB_PORT', 3306);
 
 try {
@@ -22,5 +22,6 @@ try {
 // Site configuration
 define('SITE_NAME', 'Hillpark Real Estate');
 define('SITE_URL', 'http://localhost/hillpark_realestate');
+define('HERO_IMAGE', 'https://images.unsplash.com/photo-1513584684374-8bab748fbf90?w=1200&h=600&fit=crop');
+define('DEFAULT_PROPERTY_IMAGE', 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&h=400&fit=crop');
 ?>
-
