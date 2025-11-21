@@ -76,10 +76,16 @@ include 'includes/header.php';
                 
                 if(count($properties) > 0) {
                     foreach($properties as $property):
-                    $image_url = !empty($property['image_url']) ? $property['image_url'] : DEFAULT_PROPERTY_IMAGE;
+                    // Use the getImageUrl function to properly handle uploaded images
+                    $image_url = getImageUrl($property['image_url']);
             ?>
             <div class="property-card">
-                <img src="<?php echo $image_url; ?>" alt="<?php echo htmlspecialchars($property['title']); ?>" class="property-image">
+                <div class="property-image-container">
+                    <img src="<?php echo $image_url; ?>" alt="<?php echo htmlspecialchars($property['title']); ?>" class="property-image" onerror="this.src='<?php echo DEFAULT_PROPERTY_IMAGE; ?>'">
+                    <?php if($property['featured']): ?>
+                        <span class="featured-badge">Featured</span>
+                    <?php endif; ?>
+                </div>
                 <div class="property-info">
                     <h3><?php echo htmlspecialchars($property['title']); ?></h3>
                     <p class="price">$<?php echo number_format($property['price']); ?></p>
@@ -88,6 +94,11 @@ include 'includes/header.php';
                         <span><?php echo $property['bedrooms']; ?> Beds</span>
                         <span><?php echo $property['bathrooms']; ?> Baths</span>
                         <span><?php echo number_format($property['area']); ?> sqft</span>
+                    </div>
+                    <div class="property-type">
+                        <span class="type-badge type-<?php echo $property['type']; ?>">
+                            <?php echo ucfirst($property['type']); ?>
+                        </span>
                     </div>
                     <a href="property.php?id=<?php echo $property['id']; ?>" class="btn btn-secondary">View Details</a>
                 </div>
@@ -98,7 +109,7 @@ include 'includes/header.php';
                     echo '<p>No properties found matching your criteria.</p>';
                 }
             } catch(Exception $e) {
-                echo '<p>Error loading properties. Please try again later.</p>';
+                echo '<p>Error loading properties: ' . $e->getMessage() . '</p>';
             }
             ?>
         </div>
